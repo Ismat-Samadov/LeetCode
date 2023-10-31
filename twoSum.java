@@ -31,9 +31,24 @@
 
 // Follow-up: Can you come up with an algorithm that is less than O(n2) time complexity?
 
+
+
+
+import java.util.HashMap;
+
 public class twoSum {
-    ublic int[] twoSum(int[] nums, int target) {
+    public int[] twoSum(int[] nums, int target) {
+        HashMap<Integer, Integer> numIndices = new HashMap<>();
         
+        for (int i = 0; i < nums.length; i++) {
+            int complement = target - nums[i];
+            
+            if (numIndices.containsKey(complement)) {
+                return new int[]{numIndices.get(complement), i};
+            }            
+            numIndices.put(nums[i], i);
+        }
+        
+        return new int[0];
     }
-    
 }
