@@ -44,9 +44,8 @@
 -- In 2015-01-02, the temperature was higher than the previous day (10 -> 25).
 -- In 2015-01-04, the temperature was higher than the previous day (20 -> 30).
 
-with t as (select id, 
-recordDate, 
-temperature, 
-lag(temperature,1) over( order by recordDate) as temp
-from Weather)
-select id from t where temperature > temp;
+SELECT w1.id
+FROM Weather w1
+JOIN Weather w2 ON w1.recordDate = w2.recordDate + 1
+WHERE w1.temperature > w2.temperature;
+
