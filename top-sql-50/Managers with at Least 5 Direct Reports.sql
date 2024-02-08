@@ -44,5 +44,13 @@
 -- | John |
 -- +------+
 
-with t as (select b.name,count(*)  cnt from Employee a inner join Employee b on a.managerId=b.id group by b.name)
-select b.name from t;
+WITH ManagerReports AS (
+    SELECT managerId, COUNT(*) AS num_reports
+    FROM Employee
+    GROUP BY managerId
+    HAVING COUNT(*) >= 5
+)
+SELECT name
+FROM Employee
+WHERE id IN (SELECT managerId FROM ManagerReports);
+
