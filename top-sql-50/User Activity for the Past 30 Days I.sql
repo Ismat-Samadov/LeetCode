@@ -50,5 +50,19 @@
 -- +------------+--------------+ 
 -- Explanation: Note that we do not care about days with zero active users.
 
+SELECT 
+  TO_CHAR(activity_date, 'yyyy-mm-dd') AS "day", 
+  COUNT(DISTINCT user_id) AS "active_users" 
+FROM 
+  Activity 
+WHERE 
+  activity_date between TO_DATE('28.06.2019', 'dd.mm.yyyy') 
+  and TO_DATE('27.07.2019', 'dd.mm.yyyy') 
+GROUP BY 
+  TO_CHAR(activity_date, 'yyyy-mm-dd') 
+order by 
+  1;
+
+
 
 
