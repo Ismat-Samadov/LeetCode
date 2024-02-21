@@ -61,3 +61,24 @@
 -- | 100        | 2008       | 10       | 5000  |
 -- | 200        | 2011       | 15       | 9000  |
 -- +------------+------------+----------+-------+
+
+
+with t as (
+  select 
+    a.product_id, 
+    min(a.year) as first_year 
+  from 
+    Sales a 
+  group by 
+    a.product_id
+) 
+select 
+  a.product_id, 
+  first_year, 
+  quantity, 
+  price 
+from 
+  sales a 
+  inner join t on a.product_id = t.product_id 
+  and a.year = t.first_year
+
