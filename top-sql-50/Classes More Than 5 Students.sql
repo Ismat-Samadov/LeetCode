@@ -46,3 +46,4 @@
 -- - English has 1 student, so we do not include it.
 -- - Biology has 1 student, so we do not include it.
 -- - Computer has 1 student, so we do not include it.
+select class from(select class, count(distinct student) from courses group by class having count(distinct student) >= 5);
