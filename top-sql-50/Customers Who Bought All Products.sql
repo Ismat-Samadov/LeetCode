@@ -75,5 +75,5 @@ SELECT customer_id
 FROM   cte_2
 WHERE  counts =
        (
-              SELECT max(counts)
-              FROM   cte_2);
+              SELECT count(unique product_key)
+              FROM   Product);
