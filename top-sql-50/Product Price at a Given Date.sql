@@ -42,9 +42,19 @@
 -- | 3          | 10    |
 -- +------------+-------+
 
-with a as (select product_id, max(change_date) as last_change , min(change_date) as first_change from Products group by product_id)
-select a.product_id, case when first_change > '2019-08-16' then 10 
-when last_change = '2019-08-16' then new_price
-when last_change < '2019-08-16' then new_price 
-end as price
-from a inner join Products b on a.product_id = b.product_id where price is not null
+SELECT product_id, price
+FROM
+  (SELECT product_id, new_price AS price
+   FROM Products
+   WHERE (product_id,
+          change_date) IN
+       (SELECT product_id, MAX(change_date)
+        FROM Products
+        WHERE change_date <= '2019-08-16'
+        GROUP BY product_id)
+   UNION SELECT DISTINCT product_id, 10 AS price
+   FROM Products
+   WHERE product_id NOT IN
+       (SELECT product_id FROM Products
+        WHERE change_date <= '2019-08-16') ) tmp
+ORDER BY price DESC
