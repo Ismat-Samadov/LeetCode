@@ -54,3 +54,26 @@
 -- | 5    | 4  | Bob       | 175    | ___          |
 -- | 6    | 1  | Winston   | 500    | ___          |
 -- +------+----+-----------+--------+--------------+
+
+WITH cte_1 AS (
+    SELECT 
+        a.*,
+        SUM(weight) OVER (ORDER BY TURN ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS Total_Weight
+    FROM 
+        Queue a
+),
+cte_2 AS (
+    SELECT  
+        PERSON_NAME, 
+        turn 
+    FROM 
+        cte_1 
+    WHERE 
+        Total_Weight <= 1000
+)
+SELECT 
+    PERSON_NAME 
+FROM 
+    cte_2 
+WHERE 
+    TURN = (SELECT MAX(TURN) FROM cte_2)
