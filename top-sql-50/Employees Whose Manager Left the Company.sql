@@ -45,3 +45,9 @@
 -- The employees with a salary less than $30000 are 1 (Kalel) and 11 (Joziah).
 -- Kalel's manager is employee 11, who is still in the company (Joziah).
 -- Joziah's manager is employee 6, who left the company because there is no row for employee 6 as it was deleted.
+select a.employee_id 
+  from employees a
+ where a.salary < 30000 
+   and a.manager_id is not null
+   and a.manager_id not in (select b.employee_id from employees b)
+order by a.employee_id;
