@@ -49,9 +49,8 @@
 -- For 2020-06-02, the Sold item is (Mask), we just return it.
 /* Write your PL/SQL query statement below */
 
-SELECT TO_CHAR(sell_date, 'YYYY-MM-DD') AS "sell_date", 
-COUNT(DISTINCT(product)) AS "num_sold",
-LISTAGG(DISTINCT(product), ',') WITHIN GROUP (ORDER BY product) AS "products"
-FROM activities 
-GROUP BY sell_date 
-ORDER BY sell_date;
+SELECT TO_CHAR(sell_date, 'yyyy-mm-dd') AS sell_date,
+    COUNT(DISTINCT(product)) AS num_sold, 
+    LISTAGG(product, ',') WITHIN GROUP (ORDER BY product) AS products 
+        FROM (SELECT DISTINCT sell_date, product FROM Activities) 
+            GROUP BY sell_date
