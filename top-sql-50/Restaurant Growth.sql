@@ -57,5 +57,21 @@
 -- 2nd moving average from 2019-01-02 to 2019-01-08 has an average_amount of (110 + 120 + 130 + 110 + 140 + 150 + 80)/7 = 120
 -- 3rd moving average from 2019-01-03 to 2019-01-09 has an average_amount of (120 + 130 + 110 + 140 + 150 + 80 + 110)/7 = 120
 -- 4th moving average from 2019-01-04 to 2019-01-10 has an average_amount of (130 + 110 + 140 + 150 + 80 + 110 + 130 + 150)/7 = 142.86a
+/* Write your PL/SQL query statement below */
+WITH week_table AS (   
+    SELECT 
+        DISTINCT a.visited_on AS start_date,
+        b.visited_on AS end_date
+    FROM customer a
+    JOIN customer b ON b.visited_on - a.visited_on = 6;
+)
 
+SELECT 
+    to_char(w.start_date + 6, 'YYYY-MM-DD') AS visited_on,
+    SUM(c.amount) AS amount,
+    ROUND(SUM(c.amount)/7 ,2) AS average_amount
+FROM week_table w, customer c
+WHERE c.visited_on BETWEEN w.start_date AND w.end_date
+GROUP BY w.start_date
+ORDER BY visited_on;
 
